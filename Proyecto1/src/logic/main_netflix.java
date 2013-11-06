@@ -10,43 +10,58 @@ import java.util.*;
  */
 public class main_netflix {
     
-    protected static ArrayList <administrador> datos_administrador = new ArrayList<>();
-    protected static ArrayList <cajero> datos_cajero = new ArrayList<>();;
-    protected static ArrayList <Proveedor> datos_proveedor = new ArrayList<>();
-    protected static ArrayList <cliente> datos_cliente = new ArrayList<>();
+    protected static ArrayList <usuario> datos_usuarios = new ArrayList<>();
     protected static ArrayList <Video> datos_video = new ArrayList<>();
     protected static ArrayList <Transaccion> datos_transaccion = new ArrayList<>();
     protected static boolean busqueda_pelicula;
     protected static boolean busqueda_series;
     protected static boolean disponibilidad_peliculas;
     protected static boolean disponibilidad_series;
-    protected static boolean busqueda;
+    protected static boolean busqueda_usuario;
     protected static boolean moroso;
     protected static Date now = new Date();
+    protected static Date fecha_estreno_peliculas;
+    public static Date fecha_estreno_series;
     private static final long milis_por_dia = 86400000;
     public static Video fecha_pelicula = new peliculas();
     public static Video fecha_serie = new series();
-    public static Renta fecha = (Renta)new Transaccion();
+    public static Renta fecha = new Renta();
+    static Scanner sc = new Scanner(System.in);
     
     
     public static void agregar_Datos_Cliente(String nombre, String apellido, String direccion,String usuario,
-            String contraseña,String cedula, int celular, String mail) {
-         datos_cliente.add(new cliente(nombre,apellido,direccion,usuario,contraseña,cedula,celular,mail));
+            String contraseña,String cedula, int celular, String mail, int i) {
+        if(establecer_Disponibilidad_Usuario(usuario,i)== false){
+         datos_usuarios.add(new cliente(nombre,apellido,direccion,usuario,contraseña,cedula,celular,mail));   
+        }else{
+            System.out.println("¡EL USUARIO NO ESTA DISPONIBLE!");
+        }
     }
     
     public static void agregar_Datos_cajero(String nombre, String apellido, String direccion,String usuario,
-            String contraseña,String puesto, String turno, int salario){
-        datos_cajero.add(new cajero(nombre,apellido,direccion,usuario,contraseña,puesto,turno,salario));
+            String contraseña,String puesto, String turno, int salario, int i){
+        if(establecer_Disponibilidad_Usuario(usuario,i)== false){
+        datos_usuarios.add(new cajero(nombre,apellido,direccion,usuario,contraseña,puesto,turno,salario));    
+        }else{
+        System.out.println("¡EL USUARIO NO ESTA DISPONIBLE!");
     }
-    
+}
     public static void agregar_Datos_Proovedor(String nombre, String apellido, String direccion,String usuario,
-            String contraseña , String ID, String cuenta_banco){
-        datos_proveedor.add(new Proveedor(nombre,apellido,direccion,usuario,contraseña,ID,cuenta_banco));
+            String contraseña , String ID, String cuenta_banco, int i){
+        if(establecer_Disponibilidad_Usuario(usuario,i)== false){
+        datos_usuarios.add(new Proveedor(nombre,apellido,direccion,usuario,contraseña,ID,cuenta_banco));    
+        }else{
+            System.out.println("¡EL USUARIO NO ESTA DISPONIBLE!");
+        }
     }
     
     public static void agregar_Datos_Administrador(String nombre, String apellido, String direccion,String usuario,
-            String contraseña,String puesto, String turno, int salario){
-        datos_administrador.add(new administrador(nombre,apellido,direccion,usuario,contraseña,puesto,turno,salario));
+            String contraseña,String puesto, String turno, int salario, int i){
+        if(establecer_Disponibilidad_Usuario(usuario,i)== false){
+        datos_usuarios.add(new administrador(nombre,apellido,direccion,usuario,contraseña,puesto,turno,salario));    
+        }else{
+            System.out.println("¡EL USUARIO NO ESTA DISPONIBLE!");
+        }
     }
     
     public static void agregar_Datos_Peliculas(String codigo, String titulo, String descripcion, String proovedor,
@@ -68,6 +83,38 @@ public class main_netflix {
             , String turno, String email, int cantidad_final, Date fecha_renta,boolean mora){
         datos_transaccion.add(new Renta(nombre_renta,busqueda_codigo,usuario,turno,email,cantidad_final,fecha_renta,mora));
     }
+    
+    public static boolean establecer_Disponibilidad_Usuario(String usuario, int i){
+        if(i < datos_usuarios.size()){
+            if(datos_usuarios.get(i).usuario.equals(usuario)){
+                busqueda_usuario = true;
+            }else{
+                establecer_Disponibilidad_Usuario(usuario,(i+1));
+            }
+        }else{
+            busqueda_usuario = false;
+        }
+        return busqueda_usuario;
+    }
+    
+    public static void Agregar_fecha_estreno_peliculas(int año,int mes, int dia){
+        Calendar calendario = Calendar.getInstance();
+        calendario.set(año, mes-1, dia);
+        fecha_estreno_peliculas = calendario.getTime();
+    }
+    public Date obtener_Fecha_Estreno_Peliculas(){
+        return fecha_estreno_peliculas;
+    }
+    
+    public static void agregar_Fecha_Estreno_Series(int año,int mes, int dia){
+        Calendar calendario = Calendar.getInstance();
+        calendario.set(año, mes-1, dia);
+        fecha_estreno_series = calendario.getTime();
+    }
+    public Date obtener_Fecha_Estreno_Series(){
+        return fecha_estreno_series;
+    }
+    
     public static void establecer_disponibilidad_venta_peliculas(){
         Date hoy = new Date();
         Calendar calendario = Calendar.getInstance();
@@ -128,6 +175,13 @@ public class main_netflix {
     
     public boolean obtener_busqueda_Series(){
         return busqueda_series;
+    }
+    
+    public static boolean buscar_Usuario(String usuario, String contraseña, int i){
+        if(datos_usuarios.get(i).usuario.equals(usuario)&&datos_usuarios.get(i).contraseña.equals(contraseña)){
+            return true;
+        }else
+            return false;
     }
     
         public static void establecer_Mora(int i){
@@ -223,16 +277,162 @@ public class main_netflix {
 
     /**/
     
-     /*public void Agregar_series(String nombre, String comentario){
-        if(busqueda == true){
-            System.out.println("La Serie ya esta Agregada");
-        }else{
-            listado_series.add(nombre);
-            Agregar_descripcion_series(comentario);
-        }
-    }*/
 
     public static void main(String[] args) {
+        int opcionelegida = 0;
+        
+        agregar_Datos_Administrador("Jaime", "Andara", "Aurora","andaraj@netflix.com",
+            "andara_net","Administrador", "Nocturno", 15000,0);
+    
+        agregar_Datos_Administrador("Homero", "Simpsons", "Springfield","homer@netflix.com",
+            "marge_lisa","Administrador", "Vespertino", 15000,0);
+        
+        agregar_Datos_Administrador("Trolencio", "Martinez", "Rio Priedras","trollen@netflix.com",
+            "cuanto_cabron","Administrador", "Matutino", 15000,0);
+       
+        agregar_Datos_Cliente("Ana", "Lagos", "La trejo","ana_lagos@netflix.com",
+            "2547_mbj","0501-1983-15882", 32331551, "ana_lagos@gmail.com",0);
+        
+        agregar_Datos_Cliente("Ana", "Lagos", "La trejo","ana_lagos@netflix.com",
+            "2547_mbj","0501-1983-15882", 32331551, "ana_lagos@gmail.com",0);
+            
+            
+        for (int i = 0; i < datos_usuarios.size(); i++) {
+            if(datos_usuarios.get(i) instanceof administrador){
+                System.out.println("Nombre admin: " + datos_usuarios.get(i).nombre +" "+ "Apellido Admin: " + datos_usuarios.get(i).apellido);
+            }
+            
+        }
+        
+        while(opcionelegida != 3){
+            
+            Imprimir_Menu_Principal();
+            opcionelegida = sc.nextInt();
+            switch (opcionelegida){
+                case 1:
+                    System.out.println("Ingresar usuario: ");
+                    String usuario = sc.next();
+                    System.out.println("Ingresar contraseña: ");
+                    String contraseña = sc.next();
+                    for (int i = 0; i < datos_usuarios.size(); i++) {
+                        if (buscar_Usuario(usuario,contraseña, 0) == true){
+                       if(datos_usuarios.get(i) instanceof administrador){
+                           Imprimir_Menu_Administrador();
+                           int tarea_a_realizar = sc.nextInt();
+                           while(tarea_a_realizar!=7){
+                           switch(tarea_a_realizar){
+                               case 1:
+                                   System.out.println("Ingrese Nombre del Empleado: ");
+                                   String nombre_empleado = sc.next();
+                                   System.out.println("Ingrese Apellido del Empleado: ");
+                                   String apellido_empleado = sc.next();
+                                   System.out.println("Ingrese Direccion del Empleado: ");
+                                   String direccion_empleado = sc.next();
+                                   System.out.println("Ingrese Usuario del Empleado: ");
+                                   String usuario_empleado = sc.next();
+                                   System.out.println("Ingrese Contraseña del Empleado: ");
+                                   String contraseña_empleado = sc.next();
+                                   System.out.println("Ingrese Puesto de Empleado: ");
+                                   String puesto = sc.next();
+                                   System.out.println("Ingrese Turno del Empleado: ");
+                                   String turno = sc.next();
+                                   System.out.println("Ingrese Salario del Empleado: ");
+                                   int salario = sc.nextInt();
+                                   agregar_Datos_cajero(nombre_empleado,apellido_empleado,direccion_empleado,
+                                           usuario_empleado,contraseña_empleado,puesto,turno,salario,0);
+                                   break;
+                               case 2:
+                                   System.out.println("Ingrese Nombre del cliente: ");
+                                   String nombre = sc.next();
+                                   System.out.println("Ingrese Apellido del cliente: ");
+                                   String apellido = sc.next();
+                                   System.out.println("Ingrese Direccion del cliente: ");
+                                   String direccion = sc.next();
+                                   System.out.println("Ingrese Usuario del cliente: ");
+                                   String nombre_usuario_cliente = sc.next();
+                                   System.out.println("Ingrese Contraseña del cliente: ");
+                                   String password = sc.next();
+                                   System.out.println("Ingrese cedula de cliente: ");
+                                   String cedula = sc.next();
+                                   System.out.println("Ingrese Numero Telefonico del Cliente: ");
+                                   int celular = sc.nextInt();
+                                   System.out.println("Ingrese E-Mail del cliente: ");
+                                   String email_cliente = sc.next();
+                                   agregar_Datos_Cliente(nombre,apellido,direccion,nombre_usuario_cliente,
+                                    contraseña,cedula,celular,email_cliente,0);
+                                   break;
+                               case 3:
+                                   System.out.println("Ingrese Nombre del Proveedor: ");
+                                   String nombre_proveedor = sc.next();
+                                   System.out.println("Ingrese Direccion del Proveedor: ");
+                                   String direccion_proveedor = sc.next();
+                                   System.out.println("Ingrese Usuario del Proveedor: ");
+                                   String usuario_proveedor = sc.next();
+                                   System.out.println("Ingrese Contraseña del Proveedor: ");
+                                   String contraseña_proveedor = sc.next();
+                                   System.out.println("Ingrese Puesto de Proveedor: ");
+                                   String ID = sc.next();
+                                   System.out.println("Ingrese Turno del Proveedor: ");
+                                   String cuenta_banco = sc.next();
+                                   agregar_Datos_Proovedor(nombre_proveedor,"",direccion_proveedor,usuario_proveedor,
+                                    contraseña_proveedor,ID,cuenta_banco,0);
+                                   break;
+                               case 4:
+                                   break;
+                               case 5:
+                                   System.out.println("Ingrese codigo pelicula: ");
+                                   String codigo_pelicula = sc.next();
+                                   System.out.println("Ingrese Titulo de Pelicula: ");
+                                   String titulo_pelicula = sc.next();
+                                   System.out.println("Director de la pelicula: ");
+                                   String director_pelicula = sc.next();
+                                   System.out.println("Ingrese Descripcion de pelicula: ");
+                                   String descripcion_pelicula = sc.next();
+                                   System.out.println("Ingrese Proveedor de pelicula: ");
+                                   String proveedor_pelicula = sc.next();
+                                   System.out.println("Ingrese Calificacion de pelicula: ");
+                                   String calificacion_pelicula = sc.next();
+                                   System.out.println("Ingrese cantidad en existencia de pelicula: ");
+                                   int cantidad_pelicula = sc.nextInt();
+                                   System.out.println("Agregar año de fecha estreno: ");
+                                   int año_pelicula = sc.nextInt();
+                                   System.out.println("Ingrese mes de fecha de Estreno: ");
+                                   int mes_pelicula = sc.nextInt();
+                                   System.out.println("Ingrese Dia de fecha de Estreno: ");
+                                   int dia_pelicula = sc.nextInt();
+                                   
+                                   Agregar_fecha_estreno_peliculas(año_pelicula,mes_pelicula,dia_pelicula);
+                                   agregar_Datos_Peliculas(codigo_pelicula,titulo_pelicula,descripcion_pelicula,proveedor_pelicula,
+            "Pelicula",calificacion_pelicula,cantidad_pelicula,fecha_estreno_peliculas,director_pelicula);
+                                   break;
+                               case 6:
+                                  // agregar_Datos_Series(codigo_series,titulo_series,descripcion_series,proveedor_series,
+           //                        "Series",calificacion_series,cantidad_series,fecha_estreno_series,productor_series);
+                                   break;
+                               case 7:
+                                   break;
+                               default:
+                                   break;
+                          } 
+                       }
+                       }
+                    }else{
+                        System.out.println("¡EL USUARIO NO EXISTE!");
+                    }
+                    }
+                    
+                    break;
+                case 2:
+                    
+                    break;
+                case 3:
+                    System.out.println("Vuelva Pronto");
+                    break;
+                default:
+                    break;
+            
+        }
         
     }
+}
 }
