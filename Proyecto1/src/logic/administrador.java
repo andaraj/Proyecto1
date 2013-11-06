@@ -10,7 +10,8 @@ package logic;
 public class administrador extends Empleado{
     
     
-    public administrador(String nombre, String apellido, String direccion,String usuario, String contraseña,String puesto, String turno, int salario) {
+    public administrador(String nombre, String apellido, String direccion,String usuario, String contraseña,
+            String puesto, String turno, int salario) {
         super(nombre,apellido,direccion,usuario,contraseña,puesto,turno,salario);
         
     }

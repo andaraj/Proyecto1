@@ -8,11 +8,11 @@ package logic;
  *
  * @author Jaime Andara
  */
-public class proovedor extends usuario{
+public class Proveedor extends usuario{
     private String ID;
     private String cuenta_banco;
 
-    public proovedor(String nombre, String apellido, String direccion,String usuario, String contraseña , String ID, String cuenta_banco) {
+    public Proveedor(String nombre, String apellido, String direccion,String usuario, String contraseña , String ID, String cuenta_banco) {
         super(nombre,apellido,direccion,usuario,contraseña);
         this.ID = ID;
         this.cuenta_banco = cuenta_banco;
