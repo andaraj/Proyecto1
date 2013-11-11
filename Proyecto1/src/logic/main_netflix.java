@@ -25,6 +25,9 @@ public class main_netflix {
     private static final long milis_por_dia = 86400000;
     public static Video fecha_pelicula = new peliculas();
     public static Video fecha_serie = new series();
+    public static Transaccion renta = new Renta();
+    public static Transaccion venta = new Venta();
+    public static usuario transaccion = new cajero();
     public static Renta fecha = new Renta();
     static Scanner sc = new Scanner(System.in);
     
@@ -66,11 +69,15 @@ public class main_netflix {
     
     public static void agregar_Datos_Peliculas(String codigo, String titulo, String descripcion, String proovedor,
             String tipo,String calificacion,int cantidad, Date fecha_estreno, String director){
+        if(busqueda_pelicula == false)
         datos_video.add(new peliculas(codigo,titulo,descripcion,proovedor,tipo,calificacion,cantidad,fecha_estreno,director));
+        else 
+            System.out.println("Pelicula ya Ingresada");
     }
     
     public static void agregar_Datos_Series(String codigo, String titulo, String descripcion, String proovedor,
             String tipo,String calificacion,int cantidad, Date fecha_estreno, String productor){
+        if(busqueda_series == false)
         datos_video.add(new series(codigo,titulo,descripcion,proovedor,tipo,calificacion,cantidad,fecha_estreno,productor));
     }
     
@@ -97,30 +104,27 @@ public class main_netflix {
         return busqueda_usuario;
     }
     
-    public static void Agregar_fecha_estreno_peliculas(int año,int mes, int dia){
+    public static Date Agregar_fecha_estreno_peliculas(int año,int mes, int dia){
         Calendar calendario = Calendar.getInstance();
         calendario.set(año, mes-1, dia);
         fecha_estreno_peliculas = calendario.getTime();
-    }
-    public Date obtener_Fecha_Estreno_Peliculas(){
         return fecha_estreno_peliculas;
     }
     
-    public static void agregar_Fecha_Estreno_Series(int año,int mes, int dia){
+    public static Date agregar_Fecha_Estreno_Series(int año,int mes, int dia){
         Calendar calendario = Calendar.getInstance();
         calendario.set(año, mes-1, dia);
         fecha_estreno_series = calendario.getTime();
-    }
-    public Date obtener_Fecha_Estreno_Series(){
         return fecha_estreno_series;
     }
+    
     
     public static void establecer_disponibilidad_venta_peliculas(){
         Date hoy = new Date();
         Calendar calendario = Calendar.getInstance();
         fecha_pelicula.fecha_estreno = new Date(calendario.getTimeInMillis());
         long diferencia = (hoy.getTime()-fecha_pelicula.fecha_estreno.getTime())/milis_por_dia;
-        if(diferencia > 60){
+        if(diferencia > 90){
             disponibilidad_peliculas = true;
         }else{
             disponibilidad_peliculas = false;
@@ -135,7 +139,7 @@ public class main_netflix {
         Calendar calendario = Calendar.getInstance();
         fecha_serie.fecha_estreno = new Date(calendario.getTimeInMillis());
         long diferencia = (hoy.getTime()-fecha_serie.fecha_estreno.getTime())/milis_por_dia;
-        if(diferencia > 60){
+        if(diferencia > 90){
             disponibilidad_series = true;
         }else{
             disponibilidad_series = false;
@@ -206,78 +210,34 @@ public class main_netflix {
         public static boolean obtener_mora(){
             return moroso;
         }
-    
-    public static void Imprimir_Menu_Principal(){
-        System.out.println("**********NETFLIX**********");
-        System.out.println("1- Ingresar al sistema ");
-        System.out.println("2- Ver reportes ");
-        System.out.println("3- Salir del sistema ");
-        
+    public static Transaccion establecer_Mas_Rentada(){
+        for (int i = 0; i < datos_transaccion.size(); i++) {
+            int contador = 1;
+            for (int j = i+1; j < datos_transaccion.size(); j++) {
+                if(datos_transaccion.get(i).equals(datos_transaccion.get(j))){
+                    
+                }if(datos_transaccion.get(i) != null){
+                    renta = datos_transaccion.get(i);
+                }
+            }
+        }
+        return renta;
     }
     
-    public static void Imprimir_Menu_Administrador(){
-        System.out.println("**********NETFLIX**********");
-        System.out.println("1- Agregar Empleados");
-        System.out.println("2- Agregar Clientes");
-        System.out.println("3- Agregar Proveedores");
-        System.out.println("4- Compras Realizadas");
-        System.out.println("5- Agregar Datos Peliculas");
-        System.out.println("6- Agregar Datos Series");
-        System.out.println("7- Salir del Sistema");
+    public static Transaccion establecer_Mas_Comprada(){
+        for (int i = 0; i < datos_transaccion.size(); i++) {
+            int contador = 1;
+            for (int j = i+1; j < datos_transaccion.size(); j++) {
+                if(datos_transaccion.get(i).equals(datos_transaccion.get(j))){
+                    
+                }if(datos_transaccion.get(i) != null){
+                    venta = datos_transaccion.get(i);
+                }
+            }
+        }
+        return venta;
     }
     
-    public static void Imprimir_Menu_Cajero(){
-        System.out.println("**********NETFLIX**********");
-        System.out.println("1- Vender");
-        System.out.println("2- Rentar");
-        System.out.println("3- Salir del Sistema");
-    }
-    
-    public static void Imprimir_Menu_cliente(){
-        System.out.println("**********NETFLIX**********");
-        System.out.println("1- Comprar ");
-        System.out.println("2- Rentar ");
-        System.out.println("3- Lista de peliculas ");
-        System.out.println("4- Mas rentadas ");
-        System.out.println("5- Compras Recientes");
-        System.out.println("6- Alquileres Recientes");
-        System.out.println("7- Salir del sistema ");
-    }
-    
-    public static void Imprimir_Menu_Proveedor(){
-        System.out.println("**********NETFLIX**********");
-        System.out.println("1- Cantidad en Inventario Peliculas/Series");
-        System.out.println("2- Buscar Peliculas/Series");
-        System.out.println("3- Peliculas/Series Populares");
-        System.out.println("4- Ultimas ventas realizadas a Netflix");
-        System.out.println("5- Salir del sistema");
-    }
-    /*   
- public void Compra_Venta(String usuario,String contraseña,String nombre, int pos, int cantidad_a_comprar,String email){
-     if(comprador.usuario_cliente.contains(usuario)&&comprador.contraseña_cliente.contains(contraseña)){
-         Calendar calendario = Calendar.getInstance();
-         //if(comprador.membresia){
-         for (int i = 0; i<renta_venta.listado_peliculas.size();i++){
-             System.out.println("Las peliculas disponibles son: " + renta_venta.listado_peliculas.get(i));
-         }
-         if (renta_venta.listado_peliculas.contains(nombre)){
-             pos = renta_venta.listado_peliculas.indexOf(nombre);
-         }
-         if(renta_venta.cantidad_pelicula.get(pos)>0){
-             System.out.println("La pelicula a comprar es: " + renta_venta.listado_peliculas.get(pos));
-             if(comprador.email.contains(email)){
-             venta_peliculas_final = cantidad_a_comprar*renta_venta.precio_venta_peliculas;
-             }
-         }else{
-             System.out.println("Lo sentimos la pelicula no esta disponible");
-         }
-     //}
-     }
- }*/
-
-    /**/
-    
-
     public static void main(String[] args) {
         int opcionelegida = 0;
         
@@ -293,9 +253,16 @@ public class main_netflix {
         agregar_Datos_Cliente("Ana", "Lagos", "La trejo","ana_lagos@netflix.com",
             "2547_mbj","0501-1983-15882", 32331551, "ana_lagos@gmail.com",0);
         
-        agregar_Datos_Cliente("Ana", "Lagos", "La trejo","ana_lagos@netflix.com",
-            "2547_mbj","0501-1983-15882", 32331551, "ana_lagos@gmail.com",0);
-            
+        agregar_Datos_Cliente("Maria", "Ortega", "Choloma","maria.o@netflix.com",
+            "maria.ortega","0501-1991-12582", 98435644, "maria.o@gmail.com",0);
+        
+        Date estreno = Agregar_fecha_estreno_peliculas(1996,2,16);
+        agregar_Datos_Peliculas("PC001","Happy Gilmore","Un jugador de hockey rechazado pone su abilidad sobre un campo de golf para salvar la casa de su abuela","Universal Pictures",
+            "Comedia","PG",6,estreno,"Dennis Dugan");
+        
+        Date estreno1 = Agregar_fecha_estreno_peliculas(2013,7,16);
+        agregar_Datos_Peliculas("PA001","Wolverine Inmortal","Vulnerable por primera vez y desafiando sus límites físicos y emocionales, no sólo se enfrenta al letal acero samurái, sino también a una lucha interna contra su propia inmortalidad que le volverá más fuerte de lo que jamás le hemos visto","20th Century Fox",
+            "Accion","PG-13",3,estreno1,"James Mangold");
             
         for (int i = 0; i < datos_usuarios.size(); i++) {
             if(datos_usuarios.get(i) instanceof administrador){
@@ -306,7 +273,7 @@ public class main_netflix {
         
         while(opcionelegida != 3){
             
-            Imprimir_Menu_Principal();
+            Imprimir.Menu_Principal();
             opcionelegida = sc.nextInt();
             switch (opcionelegida){
                 case 1:
@@ -317,7 +284,7 @@ public class main_netflix {
                     for (int i = 0; i < datos_usuarios.size(); i++) {
                         if (buscar_Usuario(usuario,contraseña, 0) == true){
                        if(datos_usuarios.get(i) instanceof administrador){
-                           Imprimir_Menu_Administrador();
+                           Imprimir.Menu_Administrador();
                            int tarea_a_realizar = sc.nextInt();
                            while(tarea_a_realizar!=7){
                            switch(tarea_a_realizar){
@@ -378,6 +345,10 @@ public class main_netflix {
                                     contraseña_proveedor,ID,cuenta_banco,0);
                                    break;
                                case 4:
+                                   for (Video imprimir : datos_video) {
+                                       System.out.println("Compras realizadas: " + imprimir.codigo + " " + imprimir.titulo
+                                               + " " + imprimir.proovedor);
+                                   }
                                    break;
                                case 5:
                                    System.out.println("Ingrese codigo pelicula: ");
@@ -406,15 +377,209 @@ public class main_netflix {
             "Pelicula",calificacion_pelicula,cantidad_pelicula,fecha_estreno_peliculas,director_pelicula);
                                    break;
                                case 6:
-                                  // agregar_Datos_Series(codigo_series,titulo_series,descripcion_series,proveedor_series,
-           //                        "Series",calificacion_series,cantidad_series,fecha_estreno_series,productor_series);
+                                   System.out.println("Ingrese codigo Serie: ");
+                                   String codigo_serie = sc.next();
+                                   System.out.println("Ingrese Titulo de Serie: ");
+                                   String titulo_serie = sc.next();
+                                   System.out.println("Director de la Serie: ");
+                                   String productor_serie = sc.next();
+                                   System.out.println("Ingrese Descripcion de Serie: ");
+                                   String descripcion_serie = sc.next();
+                                   System.out.println("Ingrese Proveedor de Serie: ");
+                                   String proveedor_serie = sc.next();
+                                   System.out.println("Ingrese Calificacion de Serie: ");
+                                   String calificacion_serie = sc.next();
+                                   System.out.println("Ingrese cantidad en existencia de Serie: ");
+                                   int cantidad_serie = sc.nextInt();
+                                   System.out.println("Agregar año de fecha estreno: ");
+                                   int año_serie = sc.nextInt();
+                                   System.out.println("Ingrese mes de fecha de Estreno: ");
+                                   int mes_serie = sc.nextInt();
+                                   System.out.println("Ingrese Dia de fecha de Estreno: ");
+                                   int dia_serie = sc.nextInt();
+                                   agregar_Fecha_Estreno_Series(año_serie,mes_serie,dia_serie);
+                                   
+                                  agregar_Datos_Series(codigo_serie,titulo_serie,descripcion_serie,proveedor_serie,
+                                   "Series",calificacion_serie,cantidad_serie,fecha_estreno_series,productor_serie);
                                    break;
                                case 7:
+                                   System.out.println("SALIENDO......");
                                    break;
                                default:
                                    break;
                           } 
                        }
+                       }
+                       else if (datos_usuarios.get(i) instanceof cajero){
+                           Imprimir.Menu_Cajero();
+                           int opcionarealizar = sc.nextInt();
+                           while(opcionarealizar !=3){
+                           switch(opcionarealizar){
+                               case 1:
+                                   System.out.println("Ingrese Nombre de Video: ");
+                                   String nombre_venta = sc.next();
+                                   System.out.println("Ingrese Codigo de Video: ");
+                                   String codigo_venta = sc.next();
+                                   System.out.println("Ingrese E-mail del cliente: ");
+                                   String email_cliente = sc.next();
+                                   System.out.println("Ingrese cantidad a vender: ");
+                                   int cantidad_venta = sc.nextInt();
+                                   if(disponibilidad_peliculas == true){
+                                       int indexof = datos_video.indexOf(codigo_venta);
+                                       int cantidad = datos_video.get(indexof).cantidad;
+                                   if(cantidad_venta < cantidad){    
+                                   agregar_Ventas(nombre_venta,codigo_venta,datos_usuarios.get(i).usuario,
+                                    ((cajero)transaccion).turno,email_cliente,cantidad_venta);
+                                   }else
+                                           System.out.println("Cantidad Insuficiente para realizar transaccion");
+                                   }else
+                                       System.out.println("El video no esta disponible para su venta");
+                                   break;
+                               case 2:
+                                   System.out.println("Ingrese Nombre de Video: ");
+                                   String nombre_renta = sc.next();
+                                   System.out.println("Ingrese Codigo de Video: ");
+                                   String codigo_renta = sc.next();
+                                   System.out.println("Ingrese E-mail del cliente: ");
+                                   String mail_cliente = sc.next();
+                                   System.out.println("Ingrese cantidad a Rentar: ");
+                                   int cantidad_renta = sc.nextInt();
+                                   Date fecha_renta = new Date();
+                                   int index = datos_video.indexOf(codigo_renta);
+                                   int cantidadtotal = datos_video.get(index).cantidad;
+                                   if(cantidad_renta < cantidadtotal){
+                                   agregar_Renta(nombre_renta,codigo_renta,datos_usuarios.get(i).usuario
+                                    ,((cajero)transaccion).turno,mail_cliente,cantidad_renta,fecha_renta,true);
+                                   }else
+                                       System.out.println("Cantidad insufieciente para la renta");
+                                   break;
+                               case 3:
+                                   System.out.println("Saliendo...");
+                                   break;
+                               default:
+                                   break;
+                           }
+                         }
+                       }
+                       else if(datos_usuarios.get(i) instanceof cliente){
+                           Imprimir.Menu_cliente();
+                           int opcioncasecliente = sc.nextInt();
+                           while(opcioncasecliente !=7){
+                           switch(opcioncasecliente){
+                               case 1:
+                                   System.out.println("Ingrese Nombre de Video: ");
+                                   String nombre_venta = sc.next();
+                                   System.out.println("Ingrese Codigo de Video: ");
+                                   String codigo_venta = sc.next();
+                                   System.out.println("Ingrese cantidad a Comprar: ");
+                                   int cantidad_compra = sc.nextInt();
+                                   if(disponibilidad_peliculas == true){
+                                       int indexof = datos_video.indexOf(codigo_venta);
+                                       int cantidad = datos_video.get(indexof).cantidad;
+                                   if(cantidad_compra < cantidad){    
+                                   agregar_Ventas(nombre_venta,codigo_venta,datos_usuarios.get(i).usuario,
+                                   "",((cliente)transaccion).email,cantidad_compra);
+                                   }else
+                                           System.out.println("¡CANTIDAD INSUFICIENTE PARA SU COMPRA!");
+                                   }else
+                                       System.out.println("¡VIDEO NO DISPONIBLE PARA SU COMPRA!");
+                                           
+                                   break;
+                               case 2:
+                                   System.out.println("Ingrese Nombre de Video: ");
+                                   String nombre_renta = sc.next();
+                                   System.out.println("Ingrese Codigo de Video: ");
+                                   String codigo_renta = sc.next();
+                                   System.out.println("Ingrese cantidad a Rentar: ");
+                                   int cantidad_renta = sc.nextInt();
+                                   Date fecha_renta = new Date();
+                                   int index = datos_video.indexOf(codigo_renta);
+                                   int cantidadtotal = datos_video.get(index).cantidad;
+                                   if(cantidad_renta < cantidadtotal){
+                                   agregar_Renta(nombre_renta,codigo_renta,datos_usuarios.get(i).usuario
+                                    ,"",((cliente)transaccion).email,cantidad_renta,fecha_renta,true);
+                                   }else
+                                       System.out.println("CANTIDAD INSUFICIENTE PARA SU RENTA");
+                                   break;
+                               case 3:
+                                   System.out.println("Ingresar codigo de Video: ");
+                                   String codigo_busqueda = sc.next();
+                                   int datoaeliminar = datos_transaccion.indexOf(codigo_busqueda);
+                                   if(datos_transaccion.get(i).busqueda_codigo.equals(codigo_busqueda)){
+                                       datos_transaccion.remove(datoaeliminar);
+                                   }else{
+                                       System.out.println("La transaccion no existe");
+                                   }
+                                   break;
+                               case 4:
+                                   for(Video lista : datos_video)
+                                       System.out.println("Listado de disponibles" + " " + lista.codigo + " " + lista.titulo +
+                                               " "+lista.descripcion + lista.cantidad);
+                                   break;
+                               case 5:
+                                   System.out.println(renta);
+                                   break;
+                               case 6:
+                                   System.out.println("Ingrese usuario: ");
+                                   String usuario_cli = sc.next();
+                                   for (int j = 0; j < datos_transaccion.size(); j++) {
+                                   if(datos_transaccion.get(j).usuario.equals(usuario_cli)){
+                                       System.out.println(datos_transaccion.get(j).nombre_venta_renta);
+                                   }else
+                                           System.out.println("El usuario no ha realizado ninguna transaccion");
+                                   }
+                                   break;
+                               case 7:
+                                   break;
+                               default:
+                                   break;
+                           }
+                         }
+                       }else if(datos_usuarios.get(i) instanceof Proveedor){
+                           Imprimir.Menu_Proveedor();
+                           int opcion_proveedor = sc.nextInt();
+                           while(opcion_proveedor !=5 ){
+                               switch(opcion_proveedor){
+                                   case 1:
+                                       System.out.println("Ingrese proveedor: ");
+                                       String proveedor = sc.next();
+                                       for (int j = 0; j < datos_video.size(); j++) {
+                                       if(datos_video.get(j).proovedor.equals(proveedor)){
+                                           System.out.println(datos_video.get(j).cantidad); 
+                                       }else{
+                                           System.out.println("El Proveedor no existe");
+                                       }    
+                                       }
+                                       break;
+                                   case 2:
+                                       for (int j = 0; j < datos_video.size(); j++) {
+                                       System.out.println(datos_video.get(j).titulo + " " + datos_video.get(j).descripcion);    
+                                       }
+                                       break;
+                                   case 3:
+                                       for (int j = 0; j < datos_transaccion.size(); j++) {
+                                           System.out.println("Mas vendida: " + " " + venta);
+                                           System.out.println("Mas Rentada: " + " " + renta);
+                                       }
+                                       break;
+                                   case 4:
+                                       System.out.println("Ingrese proveedor: ");
+                                       String provee = sc.next();
+                                       for (int j = 0; j < 10; j++) {
+                                       if(datos_video.get(j).proovedor.equals(provee)){
+                                           System.out.println(datos_video.get(j).titulo + " " + datos_video.get(j).cantidad); 
+                                       }else{
+                                           System.out.println("El Proveedor no existe");
+                                       }    
+                                       }
+                                       break;
+                                   case 5:
+                                       break;
+                                   default:
+                                       break;
+                               }
+                               
+                           }
                        }
                     }else{
                         System.out.println("¡EL USUARIO NO EXISTE!");
@@ -423,7 +588,8 @@ public class main_netflix {
                     
                     break;
                 case 2:
-                    
+                    for(Video imprimir:datos_video)
+                        System.out.println(imprimir);
                     break;
                 case 3:
                     System.out.println("Vuelva Pronto");

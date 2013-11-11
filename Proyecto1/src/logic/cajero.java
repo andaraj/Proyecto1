@@ -20,15 +20,6 @@ public class cajero extends Empleado{
     @Override
     public void agregar_nombre_usuario(String usuario){
         this.usuario = usuario;
-        /*System.out.println("Ingrese usuario que le gustaria tener: ");
-        String usuario = sc.next();
-        if((usuario_cajero.contains(usuario))){
-            System.out.println("El nombre de usuario ya esta ocupado, por favor digite otro: ");
-            agregar_nombre_usuario(sc);
-        }else{
-            usuario_cajero.add(usuario);
-        }
-        */
     }
     @Override
     public String obtener_nombre_usuario(){
@@ -37,15 +28,6 @@ public class cajero extends Empleado{
     @Override
     public void agregar_contraseña(String contraseña){
         this.contraseña = contraseña;
-        /*System.out.println("Ingrese una contraseña de mas de 6 digitos: ");
-        String password = sc.next();
-        if(Integer.parseInt(password)>6){
-            contraseña_cajero.add(password);
-        }else{
-            System.out.println("La contraseña agregada es menor de 6 digitos digite una con mas de 6: ");
-            agregar_contraseña(sc);
-        }
-     */   
     }
     @Override
     public String obtener_contraseña(){

@@ -45,14 +45,7 @@ public class cliente extends usuario{
     }
 
     public void establecer_Email(String email) {
-        /*System.out.println("Ingrese E-mail: ");
-        String mail = sc.next();
-        if(this.email.contains(mail)){
-            System.out.println("El email ya esta ocupado ingreselo nuevamente");
-            establecer_Email(sc);
-        }else
-            this.email.add(mail);
-        */
+        this.email = email;
     }
 
     public void establecer_Celular(int celular) {
